@@ -1,5 +1,7 @@
 #ifndef CALCULATOR_TESTER_HPP
 #define CALCULATOR_TESTER_HPP
+#include <iostream>
+#include <string>
 #include "Calculator.h"
 
 class Tester {
