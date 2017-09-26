@@ -12,7 +12,7 @@ class EquationElement {
 public:
     string value;
     bool isNumber;
-    EquationElement(string s);
+    EquationElement(string s, bool isNumber);
 };
 
 

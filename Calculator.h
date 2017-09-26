@@ -7,6 +7,7 @@
 
 #include <string>
 #include <list>
+#include <vector>
 #include "EquationElement.h"
 using namespace std;
 
@@ -21,7 +22,7 @@ public:
 
     int findOperatorAdditionSubtraction(string s);
 
-    list<EquationElement> parseString(string s);
+    vector<EquationElement> parseString(string s);
 };
 
 

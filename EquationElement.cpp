@@ -4,6 +4,7 @@
 
 #include "EquationElement.h"
 
-EquationElement::EquationElement(string s){
+EquationElement::EquationElement(string s, bool b){
     value = s;
+    isNumber = b;
 }
