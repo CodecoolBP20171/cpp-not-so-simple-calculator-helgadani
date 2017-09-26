@@ -1,7 +1,3 @@
-//
-// Created by eros on 25/09/17.
-//
-
 #ifndef CPP_NOT_SO_SIMPLE_CALCULATOR_HELGADANI_CALCULATOR_H
 #define CPP_NOT_SO_SIMPLE_CALCULATOR_HELGADANI_CALCULATOR_H
 
@@ -9,24 +5,26 @@
 #include <list>
 #include <vector>
 #include "EquationElement.h"
+
 using namespace std;
 
 
 class Calculator {
 public:
+
     vector<EquationElement> equationVector;
 
-    double evaluate(string s);
+    string removeSpaces(string equationString);
 
-    string removeSpaces(string s);
+    double evaluate(string equationString);
 
     int findOperatorMultiplyDivision();
 
     int findOperatorAdditionSubtraction();
 
-    vector<EquationElement> parseString(string s);
+    vector<EquationElement> parseEquationString(string equationString);
 
-    void doMath(int i);
+    void doMath(int index);
 };
 
 

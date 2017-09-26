@@ -1,42 +1,40 @@
-//
-// Created by eros on 25/09/17.
-//
 #include <iostream>
 #include <vector>
 #include "Calculator.h"
 #include <algorithm>
-#include <stdlib.h>
 #include "EquationElement.h"
 
 using namespace std;
 
-double Calculator::evaluate(string s) {
-    string sd = removeSpaces(s);
-    equationVector = parseString(sd);
+double Calculator::evaluate(string equationString) {
+    string correctedEquationString = removeSpaces(equationString);
+    equationVector = parseEquationString(correctedEquationString);
     //for(EquationElement element: equationList){
     //    element.print();
     //}
-    int operatorIndex = findOperatorAdditionSubtraction();
-    doMath(operatorIndex);
+    int operatorIndex = findOperatorMultiplyDivision();
+    if (operatorIndex > -1) {
+        doMath(operatorIndex);
+    }
 
 
 
-    //cout << sd << endl;
-    //cout << findOperatorMultiplyDivision(sd) << endl;
-    //cout << findOperatorAdditionSubtraction(sd) << endl;
+    //cout << correctedEquationString << endl;
+    //cout << findOperatorMultiplyDivision(correctedEquationString) << endl;
+    //cout << findOperatorAdditionSubtraction(correctedEquationString) << endl;
     //int operatorIndex = findOperatorAdditionSubtraction(equationList);
     //cout << operatorIndex << endl;
     return 1.0;
 }
 
-string Calculator::removeSpaces(string s) {
-    string newOperation = "";
-    for (unsigned int i = 0; i < s.size(); ++i) {
-        if (s[i] != ' ') {
-            newOperation += s[i];
+string Calculator::removeSpaces(string equationString) {
+    string correctedEquationString;
+    for (unsigned int i = 0; i < equationString.size(); ++i) {
+        if (equationString[i] != ' ') {
+            correctedEquationString += equationString[i];
         }
     }
-    return newOperation;
+    return correctedEquationString;
 }
 
 int Calculator::findOperatorMultiplyDivision() {
@@ -57,36 +55,36 @@ int Calculator::findOperatorAdditionSubtraction() {
     return -1;
 }
 
-vector<EquationElement> Calculator::parseString(string s){
+vector<EquationElement> Calculator::parseEquationString(string equationString){
     vector<EquationElement> result;
     vector<string> digits {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "."};
     vector<string> operators {"+", "-", "*", "/", "^"};
-    string numbers;
-    string op;
-    for (int i = 0; i < s.size(); ++i) {
-        char charFromString = s[i];
-        bool isNumber = find(digits.begin(), digits.end(), string(1, charFromString)) != digits.end();
+    string digitsOfNumber;
+    string operatorSign;
+    for (int i = 0; i < equationString.size(); ++i) {
+        char characterFromString = equationString[i];
+        bool isNumber = find(digits.begin(), digits.end(), string(1, characterFromString)) != digits.end();
         if (isNumber) {
-            if (op != "") {
-                EquationElement character(op, false);
+            if (operatorSign != "") {
+                EquationElement character(operatorSign, false);
                 result.push_back(character);
-                op = "";
+                operatorSign = "";
             }
-            numbers += charFromString;
+            digitsOfNumber += characterFromString;
         } else {
-            if (numbers != "") {
-                EquationElement character(numbers, true);
+            if (digitsOfNumber != "") {
+                EquationElement character(digitsOfNumber, true);
                 result.push_back(character);
-                numbers = "";
+                digitsOfNumber = "";
             }
-            op += charFromString;
+            operatorSign += characterFromString;
         }
-        if (i == s.size() - 1) {
-            if (numbers == "") {
-                EquationElement character(op, false);
+        if (i == equationString.size() - 1) {
+            if (digitsOfNumber == "") {
+                EquationElement character(operatorSign, false);
                 result.push_back(character);
             } else {
-                EquationElement character(numbers, true);
+                EquationElement character(digitsOfNumber, true);
                 result.push_back(character);
             }
         }
@@ -94,38 +92,36 @@ vector<EquationElement> Calculator::parseString(string s){
     return result;
 }
 
-void Calculator::doMath(int i) {
+void Calculator::doMath(int index) {
     for(EquationElement element: equationVector){
         element.print();
     }
 
-    string stringBefore = equationVector[i-1].value;
-    string stringAfter = equationVector[i+1].value;
-    double numberBefore = strtod(stringBefore.c_str(), NULL);
-    double numberAfter = strtod(stringAfter.c_str(), NULL);
-    double result;
+    string stringBeforeOperator = equationVector[index-1].value;
+    string stringAfterOperator = equationVector[index+1].value;
+    double numberBeforeOperator = strtod(stringBeforeOperator.c_str(), NULL);
+    double numberAfterOperator = strtod(stringAfterOperator.c_str(), NULL);
+    double result = 0.0;
 
-    cout << stringBefore << " " << stringAfter << endl;
-    string op = equationVector[i].value;
-    if(op == "*") {
-        result = numberBefore * numberAfter;
-    } else if(op == "+"){
-        result = numberBefore + numberAfter;
-    }  else if(op == "-"){
-        result = numberBefore - numberAfter;
-    }  else if(op == "/"){
-        result = numberBefore / numberAfter;
+    cout << stringBeforeOperator << " " << stringAfterOperator << endl;
+    string operationString = equationVector[index].value;
+
+    if(operationString == "*") {
+        result = numberBeforeOperator * numberAfterOperator;
+    } else if(operationString == "+"){
+        result = numberBeforeOperator + numberAfterOperator;
+    }  else if(operationString == "-"){
+        result = numberBeforeOperator - numberAfterOperator;
+    }  else if(operationString == "/"){
+        result = numberBeforeOperator / numberAfterOperator;
     }
-    equationVector[i-1].value = to_string(result);
-    equationVector.erase(equationVector.begin() + i, equationVector.begin() + i + 1);
+    equationVector[index-1].value = to_string(result);
+    equationVector.erase(equationVector.begin() + index, equationVector.begin() + index+2);
 
     //cout << result;
-    //for(EquationElement element1: equationVector){
-    //    element1.print();
-    //}
-
-
-
+    for(EquationElement element : equationVector){
+        element.print();
+    }
 }
 
 
