@@ -23,7 +23,7 @@ public:
         TestComplicatedFormula_noBrackets();
         //TestComplicatedFormula_root();
         //TestComplicatedFormula_rootAndPower();
-        //TestErroneousFormula_rootTypoNoBrackets();
+        TestErroneousFormula_rootTypoNoBrackets();
 
 /*
         // Boss fight
