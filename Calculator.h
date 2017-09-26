@@ -14,15 +14,19 @@ using namespace std;
 
 class Calculator {
 public:
+    vector<EquationElement> equationVector;
+
     double evaluate(string s);
 
     string removeSpaces(string s);
 
-    int findOperatorMultiplyDivision(string s);
+    int findOperatorMultiplyDivision();
 
-    int findOperatorAdditionSubtraction(string s);
+    int findOperatorAdditionSubtraction();
 
     vector<EquationElement> parseString(string s);
+
+    void doMath(int i);
 };
 
 

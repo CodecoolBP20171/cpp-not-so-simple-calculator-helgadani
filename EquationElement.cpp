@@ -8,3 +8,9 @@ EquationElement::EquationElement(string s, bool b){
     value = s;
     isNumber = b;
 }
+
+void EquationElement::print() {
+    cout << "value: " << value << "\tisNumber: " << isNumber << endl;
+}
+
+

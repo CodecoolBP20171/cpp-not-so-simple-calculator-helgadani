@@ -13,6 +13,7 @@ public:
     string value;
     bool isNumber;
     EquationElement(string s, bool isNumber);
+    void print();
 };
 
 
