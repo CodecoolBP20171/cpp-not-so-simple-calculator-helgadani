@@ -17,12 +17,12 @@ public:
         TestFormulaWithSpaces();
 
         // Level 1
-        //TestRoot();
+        TestRoot();
         TestPow();
         TestFractional();
         TestComplicatedFormula_noBrackets();
-        //TestComplicatedFormula_root();
-        //TestComplicatedFormula_rootAndPower();
+        TestComplicatedFormula_root();
+        TestComplicatedFormula_rootAndPower();
         TestErroneousFormula_rootTypoNoBrackets();
 
 /*
@@ -120,7 +120,7 @@ private:
     {
         Calculator c;
         // calculator prints an error msg and returns with 0
-        double result = c.evaluate("12+2*2rwot25+10^4+6-3");
+        double result = c.evaluate("12+2*2rrot25+10^4+6-3");
         checkResult(0, result);
     }
 

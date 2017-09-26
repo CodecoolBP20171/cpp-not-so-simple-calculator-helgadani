@@ -11,6 +11,7 @@ double Calculator::evaluate(string equationString) {
     if (correctedEquationString == "") return 0;
 
     equationVector = parseEquationString(correctedEquationString);
+    if (!isValidExpression()) return 0;
     //for(EquationElement element: equationList){
     //    element.print();
     //}
@@ -43,12 +44,23 @@ void Calculator::correctInputString(string equationString) {
 }
 
 bool Calculator::isValidExpression(){
-    return false;
+    for (EquationElement element : equationVector) {
+        if (element.isNumber) {
+            int floatPoints = 0;
+            for (char character : element.value) {
+                character == '.' ? floatPoints += 1 : floatPoints += 0;
+            }
+            if (floatPoints > 1) return false;
+        } else {
+            if (!(find(operators.begin(), operators.end(), element.value) != operators.end())) return false;
+        }
+    }
+    return true;
 }
 
 int Calculator::findOperatorRootPow() {
     for (int i = 0; i < equationVector.size(); ++i) {
-        if (equationVector[i].value == "^" || equationVector[i].value == "ˇ") return i;
+        if (equationVector[i].value == "^" || equationVector[i].value == "root") return i;
     }
     return -1;
 }
@@ -133,12 +145,12 @@ void Calculator::doOperation(int index) {
     double result;
 
     //cout << stringBeforeOperator << " " << stringAfterOperator << endl;
-
-    if (operationString == "*") result = numberBeforeOperator * numberAfterOperator;
+    if (operationString == "root") result = pow(numberAfterOperator, 1/numberBeforeOperator);
+    else if (operationString == "^") result = pow(numberBeforeOperator, numberAfterOperator);
+    else if (operationString == "/") result = numberBeforeOperator / numberAfterOperator;
+    else if (operationString == "*") result = numberBeforeOperator * numberAfterOperator;
     else if (operationString == "+") result = numberBeforeOperator + numberAfterOperator;
     else if (operationString == "-") result = numberBeforeOperator - numberAfterOperator;
-    else if (operationString == "/") result = numberBeforeOperator / numberAfterOperator;
-    else if (operationString == "^") result = pow(numberBeforeOperator, numberAfterOperator);
     else result = 0;
 
     equationVector[index-1].value = to_string(result);
