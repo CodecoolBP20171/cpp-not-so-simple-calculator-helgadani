@@ -12,8 +12,12 @@ public:
         // Level 0
         TestAddition();
         TestSubtraction();
+        TestSubtraction2();
+        TestSubtraction3();
         TestMultiplication();
+        TestMultiplication2();
         TestDivision();
+        TestDivision2();
         TestFormulaWithSpaces();
 
         // Level 1
@@ -54,11 +58,32 @@ private:
         checkResult(8, result);
     }
 
+    void TestSubtraction2()
+    {
+        Calculator c;
+        double result = c.evaluate("10+-8");
+        checkResult(2, result);
+    }
+
+    void TestSubtraction3()
+    {
+        Calculator c;
+        double result = c.evaluate("10-+6");
+        checkResult(4, result);
+    }
+
     void TestMultiplication()
     {
         Calculator c;
         double result = c.evaluate("3*2");
         checkResult(6, result);
+    }
+
+    void TestMultiplication2()
+    {
+        Calculator c;
+        double result = c.evaluate("3*-2");
+        checkResult(-6, result);
     }
 
     void TestDivision()
@@ -67,6 +92,14 @@ private:
         double result = c.evaluate("10/3");
         checkResult(3.3, result, 0.05);
     }
+
+    void TestDivision2()
+    {
+        Calculator c;
+        double result = c.evaluate("10/-3");
+        checkResult(-3.3, result, 0.05);
+    }
+
     void TestFormulaWithSpaces()
     {
         Calculator c;
