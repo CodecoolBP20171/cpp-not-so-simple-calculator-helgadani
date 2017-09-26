@@ -12,10 +12,26 @@ double Calculator::evaluate(string equationString) {
     //for(EquationElement element: equationList){
     //    element.print();
     //}
-    int operatorIndex = findOperatorMultiplyDivision();
-    if (operatorIndex > -1) {
-        doMath(operatorIndex);
+    bool ready = false;
+    bool multiply = true;
+    bool addition = true;
+    while (multiply) {
+        int operatorIndex = findOperatorMultiplyDivision();
+        if (operatorIndex > -1) {
+            doMath(operatorIndex);
+        } else {
+            multiply = false;
+        }
     }
+    while (addition) {
+        int operatorIndex = findOperatorAdditionSubtraction();
+        if (operatorIndex > -1) {
+            doMath(operatorIndex);
+        } else {
+            addition = false;
+        }
+    }
+    return strtod(equationVector[0].value.c_str(), NULL);
 
 
 
@@ -24,7 +40,6 @@ double Calculator::evaluate(string equationString) {
     //cout << findOperatorAdditionSubtraction(correctedEquationString) << endl;
     //int operatorIndex = findOperatorAdditionSubtraction(equationList);
     //cout << operatorIndex << endl;
-    return 1.0;
 }
 
 string Calculator::removeSpaces(string equationString) {
@@ -93,9 +108,9 @@ vector<EquationElement> Calculator::parseEquationString(string equationString){
 }
 
 void Calculator::doMath(int index) {
-    for(EquationElement element: equationVector){
-        element.print();
-    }
+//    for(EquationElement element: equationVector){
+//        element.print();
+//    }
 
     string stringBeforeOperator = equationVector[index-1].value;
     string stringAfterOperator = equationVector[index+1].value;
@@ -103,7 +118,7 @@ void Calculator::doMath(int index) {
     double numberAfterOperator = strtod(stringAfterOperator.c_str(), NULL);
     double result = 0.0;
 
-    cout << stringBeforeOperator << " " << stringAfterOperator << endl;
+    //cout << stringBeforeOperator << " " << stringAfterOperator << endl;
     string operationString = equationVector[index].value;
 
     if(operationString == "*") {
@@ -119,9 +134,9 @@ void Calculator::doMath(int index) {
     equationVector.erase(equationVector.begin() + index, equationVector.begin() + index+2);
 
     //cout << result;
-    for(EquationElement element : equationVector){
-        element.print();
-    }
+    //for(EquationElement element : equationVector){
+    //    element.print();
+    //}
 }
 
 
