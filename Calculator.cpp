@@ -3,15 +3,17 @@
 //
 #include <iostream>
 #include "Calculator.h"
+#include "EquationElement.h"
 
 using namespace std;
 
-
 double Calculator::evaluate(string s) {
     string sd = removeSpaces(s);
+    list<EquationElement> equationList = parseString(sd);
     cout << sd << endl;
-    cout << findOperatorMultiplyDivision(sd) << endl;
-    cout << findOperatorAdditionSubtraction(sd) << endl;
+    //cout << findOperatorMultiplyDivision(sd) << endl;
+    //cout << findOperatorAdditionSubtraction(sd) << endl;
+    int operatorIndex = findOperatorAdditionSubtraction(sd);
     return 1.0;
 }
 
@@ -41,5 +43,13 @@ int Calculator::findOperatorAdditionSubtraction(string s) {
         }
     }
     return -1;
+}
+
+list<EquationElement> Calculator::parseString(string s){
+    list<EquationElement> result;
+    EquationElement element("1");
+
+    //result.insert("1");
+    return result;
 }
 
