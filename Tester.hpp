@@ -15,16 +15,16 @@ public:
         TestMultiplication();
         TestDivision();
         TestFormulaWithSpaces();
-/*
+
         // Level 1
-        TestRoot();
+        //TestRoot();
         TestPow();
         TestFractional();
-        TestComplicatedFormula_noBrackets();
-        TestComplicatedFormula_root();
-        TestComplicatedFormula_rootAndPower();
-        TestErroneousFormula_rootTypoNoBrackets();
-*/
+        //TestComplicatedFormula_noBrackets();
+        //TestComplicatedFormula_root();
+        //TestComplicatedFormula_rootAndPower();
+        //TestErroneousFormula_rootTypoNoBrackets();
+
 /*
         // Boss fight
         TestComplicatedFormula_brackets();

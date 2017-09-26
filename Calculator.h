@@ -18,7 +18,9 @@ public:
 
     double evaluate(string equationString);
 
-    int findOperatorMultiplyDivision();
+    int findOperatorRootPow();
+
+    int findOperatorMultiplicationDivision();
 
     int findOperatorAdditionSubtraction();
 

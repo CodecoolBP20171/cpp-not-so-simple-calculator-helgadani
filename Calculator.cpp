@@ -12,11 +12,19 @@ double Calculator::evaluate(string equationString) {
     //for(EquationElement element: equationList){
     //    element.print();
     //}
-    bool ready = false;
+    bool power = true;
     bool multiply = true;
     bool addition = true;
+    while (power) {
+        int operatorIndex = findOperatorRootPow();
+        if (operatorIndex > -1) {
+            doMath(operatorIndex);
+        } else {
+            power = false;
+        }
+    }
     while (multiply) {
-        int operatorIndex = findOperatorMultiplyDivision();
+        int operatorIndex = findOperatorMultiplicationDivision();
         if (operatorIndex > -1) {
             doMath(operatorIndex);
         } else {
@@ -36,7 +44,7 @@ double Calculator::evaluate(string equationString) {
 
 
     //cout << correctedEquationString << endl;
-    //cout << findOperatorMultiplyDivision(correctedEquationString) << endl;
+    //cout << findOperatorMultiplicationDivision(correctedEquationString) << endl;
     //cout << findOperatorAdditionSubtraction(correctedEquationString) << endl;
     //int operatorIndex = findOperatorAdditionSubtraction(equationList);
     //cout << operatorIndex << endl;
@@ -52,7 +60,16 @@ string Calculator::removeSpaces(string equationString) {
     return correctedEquationString;
 }
 
-int Calculator::findOperatorMultiplyDivision() {
+int Calculator::findOperatorRootPow() {
+    for (int i = 0; i < equationVector.size(); ++i) {
+        if (equationVector[i].value == "^" || equationVector[i].value == "root") {
+            return i;
+        }
+    }
+    return -1;
+}
+
+int Calculator::findOperatorMultiplicationDivision() {
     for (int i = 0; i < equationVector.size(); ++i) {
         if (equationVector[i].value == "/" || equationVector[i].value == "*") {
             return i;
@@ -79,6 +96,7 @@ vector<EquationElement> Calculator::parseEquationString(string equationString){
     for (int i = 0; i < equationString.size(); ++i) {
         char characterFromString = equationString[i];
         bool isNumber = find(digits.begin(), digits.end(), string(1, characterFromString)) != digits.end();
+        bool isOperator = find(operators.begin(), operators.end(), string(1, characterFromString)) != operators.end();
         if (isNumber) {
             if (operatorSign != "") {
                 EquationElement character(operatorSign, false);
@@ -129,6 +147,8 @@ void Calculator::doMath(int index) {
         result = numberBeforeOperator - numberAfterOperator;
     }  else if(operationString == "/"){
         result = numberBeforeOperator / numberAfterOperator;
+    } else if(operationString == "^"){
+        result = pow(numberBeforeOperator, numberAfterOperator);
     }
     equationVector[index-1].value = to_string(result);
     equationVector.erase(equationVector.begin() + index, equationVector.begin() + index+2);
@@ -138,6 +158,8 @@ void Calculator::doMath(int index) {
     //    element.print();
     //}
 }
+
+
 
 
 
