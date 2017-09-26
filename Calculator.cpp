@@ -7,7 +7,9 @@
 using namespace std;
 
 double Calculator::evaluate(string equationString) {
-    string correctedEquationString = removeSpaces(equationString);
+    string correctedEquationString = correctInputString(equationString);
+    if (correctedEquationString == "") return 0;
+
     equationVector = parseEquationString(correctedEquationString);
     //for(EquationElement element: equationList){
     //    element.print();
@@ -50,12 +52,19 @@ double Calculator::evaluate(string equationString) {
     //cout << operatorIndex << endl;
 }
 
-string Calculator::removeSpaces(string equationString) {
+string Calculator::correctInputString(string equationString) {
+    vector<char> validCharacters {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '+', '-', '*', '/', '^',
+                                  'r', 'o', 't'};
     string correctedEquationString;
     for (unsigned int i = 0; i < equationString.size(); ++i) {
         if (equationString[i] != ' ') {
-            correctedEquationString += equationString[i];
+            if (find(validCharacters.begin(), validCharacters.end(), equationString[i]) != validCharacters.end()) {
+                correctedEquationString += equationString[i];
+            } else {
+                return "";
+            }
         }
+
     }
     return correctedEquationString;
 }
@@ -90,13 +99,13 @@ int Calculator::findOperatorAdditionSubtraction() {
 vector<EquationElement> Calculator::parseEquationString(string equationString){
     vector<EquationElement> result;
     vector<string> digits {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "."};
-    vector<string> operators {"+", "-", "*", "/", "^"};
+    //vector<string> operators {"+", "-", "*", "/", "^"};
     string digitsOfNumber;
     string operatorSign;
     for (int i = 0; i < equationString.size(); ++i) {
         char characterFromString = equationString[i];
         bool isNumber = find(digits.begin(), digits.end(), string(1, characterFromString)) != digits.end();
-        bool isOperator = find(operators.begin(), operators.end(), string(1, characterFromString)) != operators.end();
+        //bool isOperator = find(operators.begin(), operators.end(), string(1, characterFromString)) != operators.end();
         if (isNumber) {
             if (operatorSign != "") {
                 EquationElement character(operatorSign, false);

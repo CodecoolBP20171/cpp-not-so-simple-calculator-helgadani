@@ -20,7 +20,7 @@ public:
         //TestRoot();
         TestPow();
         TestFractional();
-        //TestComplicatedFormula_noBrackets();
+        TestComplicatedFormula_noBrackets();
         //TestComplicatedFormula_root();
         //TestComplicatedFormula_rootAndPower();
         //TestErroneousFormula_rootTypoNoBrackets();

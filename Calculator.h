@@ -14,7 +14,7 @@ public:
 
     vector<EquationElement> equationVector;
 
-    string removeSpaces(string equationString);
+    string correctInputString(string equationString);
 
     double evaluate(string equationString);
 
