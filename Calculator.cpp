@@ -6,23 +6,22 @@ using namespace std;
 double Calculator::evaluate(string equationString) {
     correctInputString(equationString);
     if (correctedEquationString.empty()) {
-        cout << "nem jó" << endl;
+        cout << "Something is not correct, check your characters in your equation!" << endl;
         return 0;
     }
-
     equationVector = parseEquationString(correctedEquationString);
     if (!isValidExpression()) {
-        cout << "ez sem jó" << endl;
+        cout << "Not a valid equation." << endl;
         return 0;
     }
 
     try {
         doMath();
-    } catch(overflow_error e) {
-        cout << e.what();
+    } catch(overflow_error exeption) {
+        cout << exeption.what() << endl;
         return 0;
-    } catch (logic_error e) {
-        cout << e.what();
+    } catch (logic_error exception) {
+        cout << exception.what() << endl;
         return 0;
     }
 
@@ -153,16 +152,17 @@ void Calculator::doOperation(int index) {
     string operationString = equationVector[index].getValue();;
 
     if (operationString == "root") {
-        // A negatív számoknak nincsen tört, valamint páros gyökük.
-        if (numberAfterOperator < 0 && ((int) numberBeforeOperator % 2 == 0 || numberBeforeOperator - (int) numberBeforeOperator != 0)) throw std::logic_error ("What the hell do you want??");
-            // Negatív számok negatív egész gyökének számítása.
+        // TODO A negatív számoknak nincsen tört, valamint páros gyökük.
+        if (((int) numberBeforeOperator % 2 == 0 || numberBeforeOperator - (int) numberBeforeOperator != 0) &&
+            numberAfterOperator < 0) throw std::logic_error ("Operation is impossible to perform.");
+            // TODO Negatív számok negatív egész gyökének számítása.
         else if (numberBeforeOperator < 0 && numberBeforeOperator - (int) numberBeforeOperator == 0) result = 0 - pow(abs(numberAfterOperator), 1/numberBeforeOperator);
         else result = pow(numberAfterOperator, 1/numberBeforeOperator);
     }
     else if (operationString == "^") {
-        // A negatív számoknak nincsen tört hatványuk, valamint a 0-nak nincsen 0-dik hatványa.
+        // TODO A negatív számoknak nincsen tört hatványuk, valamint a 0-nak nincsen 0-dik hatványa.
         if ((numberBeforeOperator < 0 && numberAfterOperator - (int) numberAfterOperator != 0) ||
-            (numberBeforeOperator == 0 && numberAfterOperator == 0)) throw std::logic_error ("What the hell do you want??");
+            (numberBeforeOperator == 0 && numberAfterOperator == 0)) throw std::logic_error ("Operation is impossible to perform.");
         else result = pow(numberBeforeOperator, numberAfterOperator);
     }
     else if (operationString == "/") {
