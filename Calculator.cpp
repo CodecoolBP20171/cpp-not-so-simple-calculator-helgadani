@@ -35,9 +35,11 @@ void Calculator::correctInputString(string equationString) {
 
 bool Calculator::isValidExpression(){
     int counter = 1;
+    bool isFirstElementNegative = false;
     for (EquationElement element : equationVector) {
         if (counter == 1) {
             if (element.value != "-" && !element.isNumber) return false;
+            if (element.value == "-") isFirstElementNegative = true;
         } else if (counter == equationVector.size()) {
             if (!element.isNumber) return false;
         }
@@ -50,24 +52,11 @@ bool Calculator::isValidExpression(){
         }
         ++counter;
     }
-    return true;
-}
-
-vector<double> Calculator::findNumbers(int index) {
-    double numberBeforeOperator;
-    double numberAfterOperator;
-
-    if (index == 0) {
-        numberBeforeOperator = 0;
-        numberAfterOperator = strtod(equationVector[index+1].value.c_str(), NULL);
-    } else if (index == equationVector.size()-1) {
-        numberBeforeOperator = strtod(equationVector[index-1].value.c_str(), NULL);
-        numberAfterOperator = 0;
-    } else {
-        numberBeforeOperator = strtod(equationVector[index-1].value.c_str(), NULL);
-        numberAfterOperator = strtod(equationVector[index+1].value.c_str(), NULL);
+    if (isFirstElementNegative) {
+        equationVector[0].value = to_string(0 - strtod(equationVector[1].value.c_str(), NULL));
+        equationVector.erase(equationVector.begin() + 1);
     }
-    return vector<double> {numberBeforeOperator, numberAfterOperator};
+    return true;
 }
 
 int Calculator::findOperatorRootPow() {
@@ -136,8 +125,7 @@ void Calculator::doMath() {
     while (operatorPrecedence1) {
         int operatorIndex = findOperatorRootPow();
         if (operatorIndex > -1) {
-            vector<double> numbers = findNumbers(operatorIndex);
-            doOperation(operatorIndex, numbers[0], numbers[1]);
+            doOperation(operatorIndex);
         }
         else operatorPrecedence1 = false;
     }
@@ -145,8 +133,7 @@ void Calculator::doMath() {
     while (operatorPrecedence2) {
         int operatorIndex = findOperatorMultiplicationDivision();
         if (operatorIndex > -1) {
-            vector<double> numbers = findNumbers(operatorIndex);
-            doOperation(operatorIndex, numbers[0], numbers[1]);
+            doOperation(operatorIndex);
         }
         else operatorPrecedence2 = false;
     }
@@ -154,15 +141,16 @@ void Calculator::doMath() {
     while (operatorPrecedence3) {
         int operatorIndex = findOperatorAdditionSubtraction();
         if (operatorIndex > -1) {
-            vector<double> numbers = findNumbers(operatorIndex);
-            doOperation(operatorIndex, numbers[0], numbers[1]);
+            doOperation(operatorIndex);
         }
         else operatorPrecedence3 = false;
     }
 }
 
-void Calculator::doOperation(int index, double numberBeforeOperator, double numberAfterOperator) {
+void Calculator::doOperation(int index) {
 
+    double numberBeforeOperator = strtod(equationVector[index-1].value.c_str(), NULL);
+    double numberAfterOperator = strtod(equationVector[index+1].value.c_str(), NULL);
     double result;
     string operationString = equationVector[index].value;
 

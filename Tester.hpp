@@ -49,15 +49,15 @@ private:
     void TestAddition()
     {
         Calculator c;
-        double result = c.evaluate("-10+2");
-        checkResult(-8, result);
+        double result = c.evaluate("10+2");
+        checkResult(12, result);
     }
 
     void TestAddition2()
     {
         Calculator c;
         double result = c.evaluate("-10+2");
-        checkResult(12, result);
+        checkResult(-8, result);
     }
 
     void TestSubtraction()

@@ -23,11 +23,10 @@ public:
     bool operatorPrecedence3 = true;
 
     vector<EquationElement> parseEquationString(string equationString);
-    vector<double> findNumbers(int index);
     double evaluate(string equationString);
     void correctInputString(string equationString);
     void doMath();
-    void doOperation(int index, double num1, double num2);
+    void doOperation(int index);
     bool isValidExpression();
     int findOperatorRootPow();
     int findOperatorMultiplicationDivision();
