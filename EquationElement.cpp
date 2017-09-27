@@ -5,8 +5,18 @@ EquationElement::EquationElement(string s, bool b){
     isNumber = b;
 }
 
-void EquationElement::print() {
-    cout << "value: " << value << "\tisNumber: " << isNumber << endl;
+string EquationElement::getValue() {
+    return value;
 }
 
+bool EquationElement::getIsNumber() {
+    return isNumber;
+}
 
+void EquationElement::setValue(string value) {
+    this->value = value;
+}
+
+void EquationElement::setIsnumber(bool isNumber) {
+    this->isNumber = isNumber;
+}

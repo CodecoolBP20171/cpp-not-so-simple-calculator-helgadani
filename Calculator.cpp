@@ -17,7 +17,7 @@ double Calculator::evaluate(string equationString) {
     }
 
     doMath();
-    return strtod(equationVector[0].value.c_str(), NULL);
+    return strtod(equationVector[0].getValue().c_str(), NULL);
 }
 
 void Calculator::correctInputString(string equationString) {
@@ -38,22 +38,22 @@ bool Calculator::isValidExpression(){
     bool isFirstElementNegative = false;
     for (EquationElement element : equationVector) {
         if (counter == 1) {
-            if (element.value != "-" && !element.isNumber) return false;
-            if (element.value == "-") isFirstElementNegative = true;
+            if (element.getValue() != "-" && !element.getIsNumber()) return false;
+            if (element.getValue() == "-") isFirstElementNegative = true;
         } else if (counter == equationVector.size()) {
-            if (!element.isNumber) return false;
+            if (!element.getIsNumber()) return false;
         }
-        if (element.isNumber) {
+        if (element.getIsNumber()) {
             int floatPoints = 0;
-            for (char character : element.value) character == '.' ? floatPoints += 1 : floatPoints += 0;
+            for (char character : element.getValue()) character == '.' ? floatPoints += 1 : floatPoints += 0;
             if (floatPoints > 1) return false;
         } else {
-            if (!(find(validOperators.begin(), validOperators.end(), element.value) != validOperators.end())) return false;
+            if (!(find(validOperators.begin(), validOperators.end(), element.getValue()) != validOperators.end())) return false;
         }
         ++counter;
     }
     if (isFirstElementNegative) {
-        equationVector[0].value = to_string(0 - strtod(equationVector[1].value.c_str(), NULL));
+        equationVector[0].setValue(to_string(0 - strtod(equationVector[1].getValue().c_str(), NULL)));
         equationVector.erase(equationVector.begin() + 1);
     }
     return true;
@@ -61,24 +61,24 @@ bool Calculator::isValidExpression(){
 
 int Calculator::findOperatorRootPow() {
     for (int i = 0; i < equationVector.size(); ++i) {
-        if (equationVector[i].value == "^" || equationVector[i].value == "root") return i;
+        if (equationVector[i].getValue() == "^" || equationVector[i].getValue() == "root") return i;
     }
     return -1;
 }
 
 int Calculator::findOperatorMultiplicationDivision() {
     for (int i = 0; i < equationVector.size(); ++i) {
-        if (equationVector[i].value == "/" || equationVector[i].value == "*" ||
-            equationVector[i].value == "/-" || equationVector[i].value == "*-" ||
-            equationVector[i].value == "/+" || equationVector[i].value == "*+") return i;
+        if (equationVector[i].getValue() == "/" || equationVector[i].getValue() == "*" ||
+            equationVector[i].getValue() == "/-" || equationVector[i].getValue() == "*-" ||
+            equationVector[i].getValue() == "/+" || equationVector[i].getValue() == "*+") return i;
     }
     return -1;
 }
 
 int Calculator::findOperatorAdditionSubtraction() {
     for (int i = 0; i < equationVector.size(); ++i) {
-        if (equationVector[i].value == "+" || equationVector[i].value == "-" ||
-            equationVector[i].value == "-+" || equationVector[i].value == "+-") return i;
+        if (equationVector[i].getValue() == "+" || equationVector[i].getValue() == "-" ||
+            equationVector[i].getValue() == "-+" || equationVector[i].getValue() == "+-") return i;
     }
     return -1;
 }
@@ -149,10 +149,10 @@ void Calculator::doMath() {
 
 void Calculator::doOperation(int index) {
 
-    double numberBeforeOperator = strtod(equationVector[index-1].value.c_str(), NULL);
-    double numberAfterOperator = strtod(equationVector[index+1].value.c_str(), NULL);
+    double numberBeforeOperator = strtod(equationVector[index-1].getValue().c_str(), NULL);
+    double numberAfterOperator = strtod(equationVector[index+1].getValue().c_str(), NULL);
     double result;
-    string operationString = equationVector[index].value;
+    string operationString = equationVector[index].getValue();
 
     if (operationString == "root") result = pow(numberAfterOperator, 1/numberBeforeOperator);
     else if (operationString == "^") result = pow(numberBeforeOperator, numberAfterOperator);
@@ -166,7 +166,7 @@ void Calculator::doOperation(int index) {
             operationString == "-+") result = numberBeforeOperator - numberAfterOperator;
     else result = 0;
 
-    equationVector[index-1].value = to_string(result);
+    equationVector[index-1].setValue(to_string(result));
     equationVector.erase(equationVector.begin() + index, equationVector.begin() + index+2);
 }
 
