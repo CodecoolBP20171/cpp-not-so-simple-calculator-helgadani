@@ -11,6 +11,7 @@ public:
         failedTests = 0;
         // Level 0
         TestAddition();
+        TestAddition2();
         TestSubtraction();
         TestSubtraction2();
         TestSubtraction3();
@@ -28,6 +29,7 @@ public:
         TestComplicatedFormula_root();
         TestComplicatedFormula_rootAndPower();
         TestErroneousFormula_rootTypoNoBrackets();
+        TestErroneousFormula_rootTypoNoBrackets2();
 
 /*
         // Boss fight
@@ -48,6 +50,13 @@ private:
     {
         Calculator c;
         double result = c.evaluate("10+2");
+        checkResult(12, result);
+    }
+
+    void TestAddition2()
+    {
+        Calculator c;
+        double result = c.evaluate("-10+2");
         checkResult(12, result);
     }
 
@@ -154,6 +163,14 @@ private:
         Calculator c;
         // calculator prints an error msg and returns with 0
         double result = c.evaluate("12+2*2rrot25+10^4+6-3");
+        checkResult(0, result);
+    }
+
+    void TestErroneousFormula_rootTypoNoBrackets2()
+    {
+        Calculator c;
+        // calculator prints an error msg and returns with 0
+        double result = c.evaluate("-12+2*-+2root-25+10^4+6-3");
         checkResult(0, result);
     }
 

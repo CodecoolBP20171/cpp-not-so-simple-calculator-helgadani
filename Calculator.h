@@ -16,17 +16,18 @@ public:
     vector<char> validCharacters {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '+', '-', '*', '/', '^',
                                   'r', 'o', 't'};
     vector<string> validDigits {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "."};
-    vector<string> validOperators {"+", "-", "+-", "-+", "*", "*-", "/", "/-", "^", "root"};
+    vector<string> validOperators {"+", "-", "+-", "-+", "*", "*+", "*-", "/", "/+", "/-", "^", "root"};
     vector<string> brakets {"(", ")"};
     bool operatorPrecedence1 = true;
     bool operatorPrecedence2 = true;
     bool operatorPrecedence3 = true;
 
     vector<EquationElement> parseEquationString(string equationString);
+    vector<double> findNumbers(int index);
     double evaluate(string equationString);
     void correctInputString(string equationString);
     void doMath();
-    void doOperation(int index);
+    void doOperation(int index, double num1, double num2);
     bool isValidExpression();
     int findOperatorRootPow();
     int findOperatorMultiplicationDivision();
