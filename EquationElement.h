@@ -6,14 +6,15 @@
 using namespace std;
 
 class EquationElement {
-public:
-
+private:
     string value;
     bool isNumber;
-
+public:
     EquationElement(string value, bool isNumber);
-
-    void print();
+    string getValue();
+    void setValue(string value);
+    bool getIsNumber();
+    void setIsnumber(bool isNumber);
 };
 
 
