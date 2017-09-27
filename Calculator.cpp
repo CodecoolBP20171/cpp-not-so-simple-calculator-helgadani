@@ -72,8 +72,9 @@ int Calculator::findOperatorRootPow() {
 
 int Calculator::findOperatorMultiplicationDivision() {
     for (int i = 0; i < equationVector.size(); ++i) {
-        if (equationVector[i].value == "/" || equationVector[i].value == "/-" ||
-            equationVector[i].value == "*" || equationVector[i].value == "*-") return i;
+        if (equationVector[i].value == "/" || equationVector[i].value == "*" ||
+            equationVector[i].value == "/-" || equationVector[i].value == "*-" ||
+            equationVector[i].value == "/+" || equationVector[i].value == "*+") return i;
     }
     return -1;
 }
@@ -160,9 +161,9 @@ void Calculator::doOperation(int index, double numberBeforeOperator, double numb
 
     if (operationString == "root") result = pow(numberAfterOperator, 1/numberBeforeOperator);
     else if (operationString == "^") result = pow(numberBeforeOperator, numberAfterOperator);
-    else if (operationString == "/") result = numberBeforeOperator / numberAfterOperator;
+    else if (operationString == "/" || operationString == "/+") result = numberBeforeOperator / numberAfterOperator;
     else if (operationString == "/-") result = numberBeforeOperator / (0-numberAfterOperator);
-    else if (operationString == "*") result = numberBeforeOperator * numberAfterOperator;
+    else if (operationString == "*" || operationString == "*+") result = numberBeforeOperator * numberAfterOperator;
     else if (operationString == "*-") result = numberBeforeOperator * (0-numberAfterOperator);
     else if (operationString == "+") result = numberBeforeOperator + numberAfterOperator;
     else if (operationString == "-" ||
