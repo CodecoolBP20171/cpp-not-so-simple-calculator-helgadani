@@ -34,7 +34,13 @@ void Calculator::correctInputString(string equationString) {
 }
 
 bool Calculator::isValidExpression(){
+    int counter = 1;
     for (EquationElement element : equationVector) {
+        if (counter == 1) {
+            if (element.value != "-" && !element.isNumber) return false;
+        } else if (counter == equationVector.size()) {
+            if (!element.isNumber) return false;
+        }
         if (element.isNumber) {
             int floatPoints = 0;
             for (char character : element.value) character == '.' ? floatPoints += 1 : floatPoints += 0;
@@ -42,6 +48,7 @@ bool Calculator::isValidExpression(){
         } else {
             if (!(find(validOperators.begin(), validOperators.end(), element.value) != validOperators.end())) return false;
         }
+        ++counter;
     }
     return true;
 }
@@ -170,6 +177,7 @@ void Calculator::doOperation(int index, double numberBeforeOperator, double numb
             operationString == "+-" ||
             operationString == "-+") result = numberBeforeOperator - numberAfterOperator;
     else result = 0;
+
 
     if (index != 0) {
         equationVector[index-1].value = to_string(result);
