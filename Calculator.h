@@ -11,10 +11,12 @@ using namespace std;
 class Calculator {
 public:
 
+    int openingBrackets;
+    int closingBrackets;
     string correctedEquationString;
     vector<EquationElement> equationVector;
     vector<char> validCharacters {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '+', '-', '*', '/', '^',
-                                  'r', 'o', 't'};
+                                  'r', 'o', 't', '(', ')'};
     vector<string> validDigits {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "."};
     vector<string> validOperators {"+", "-", "*", "/", "^", "root"};
     vector<string> brakets {"(", ")"};

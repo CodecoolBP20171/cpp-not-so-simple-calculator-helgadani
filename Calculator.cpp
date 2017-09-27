@@ -92,35 +92,97 @@ vector<EquationElement> Calculator::parseEquationString(string equationString){
     vector<EquationElement> result;
     string digitsOfNumber;
     string operatorSign;
-
-    for (int i = 0; i < equationString.size(); ++i) {
+    string bracket;
+    // TODO Maybe it should be less than 100 line??
+    for (int i = 0; i < equationString.size() - 1; ++i) {
         bool isNumber = find(validDigits.begin(), validDigits.end(), string(1, equationString[i])) != validDigits.end();
+        bool isNextNumber = find(validDigits.begin(), validDigits.end(), string(1, equationString[i+1])) != validDigits.end();
+        bool isBracket = (equationString[i] == '(' || equationString[i] == ')');
+        bool isNextBracket = (equationString[i+1] == '(' || equationString[i+1] == ')');
 
-        if (isNumber) {
-            if (!operatorSign.empty()) {
-                EquationElement character(operatorSign, false);
+        if (i == (equationString.size() - 2)) {
+            if (isNumber) {
+                digitsOfNumber += equationString[i];
+                if (isNextNumber) {
+                    digitsOfNumber += equationString[i+1];
+                    EquationElement character(digitsOfNumber, true);
+                    result.push_back(character);}
+                else {
+                    EquationElement character(digitsOfNumber, true);
+                    result.push_back(character);
+                    if (isNextBracket) {
+                        bracket += equationString[i+1];
+                        EquationElement character(bracket, false);
+                        result.push_back(character);
+                    } else {
+                        operatorSign += equationString[i+1];
+                        EquationElement character(operatorSign, false);
+                        result.push_back(character);
+                    }
+                }
+            } else if (isBracket) {
+                bracket += equationString[i];
+                EquationElement character(bracket, false);
                 result.push_back(character);
-                operatorSign.clear();
-            }
-            digitsOfNumber += equationString[i];
-        } else {
-            if (!digitsOfNumber.empty()) {
-                EquationElement character(digitsOfNumber, true);
-                result.push_back(character);
-                digitsOfNumber.clear();
-            }
-            operatorSign += equationString[i];
-        }
-
-        if (i == equationString.size() - 1) {
-            if (digitsOfNumber.empty()) {
-                EquationElement character(operatorSign, false);
-                result.push_back(character);
+                if (isNextNumber) {
+                    digitsOfNumber += equationString[i+1];
+                    EquationElement character(digitsOfNumber, true);
+                    result.push_back(character);
+                } else if (isNextBracket) {
+                    bracket.clear();
+                    bracket += equationString[i+1];
+                    EquationElement character(bracket, false);
+                    result.push_back(character);
+                } else {
+                    operatorSign += equationString[i+1];
+                    EquationElement character(operatorSign, false);
+                    result.push_back(character);
+                }
             } else {
-                EquationElement character(digitsOfNumber, true);
+                operatorSign += equationString[i];
+                if (!isNextNumber && !isNextBracket) {
+                    operatorSign += equationString[i+1];
+                    EquationElement character(operatorSign, false);
+                    result.push_back(character);
+                } else {
+                    EquationElement character(operatorSign, false);
+                    result.push_back(character);
+                    if (isNextNumber) {
+                        digitsOfNumber += equationString[i+1];
+                        EquationElement character(digitsOfNumber, true);
+                        result.push_back(character);
+                    } else {
+                        bracket += equationString[i+1];
+                        EquationElement character(bracket, false);
+                        result.push_back(character);
+                    }
+                }
+            }
+        } else {
+            if (isNumber) {
+                digitsOfNumber += equationString[i];
+                if (!isNextNumber) {
+                    EquationElement character(digitsOfNumber, true);
+                    result.push_back(character);
+                    digitsOfNumber.clear();
+                }
+            } else if (isBracket) {
+                bracket += equationString[i];
+                EquationElement character(bracket, false);
                 result.push_back(character);
+                bracket.clear();
+            } else {
+                operatorSign += equationString[i];
+                if (isNextNumber || isNextBracket) {
+                    EquationElement character(operatorSign, false);
+                    result.push_back(character);
+                    operatorSign.clear();
+                }
             }
         }
+    }
+    for (EquationElement element : result) {
+        cout << element.getValue() << endl;
     }
     return result;
 }
