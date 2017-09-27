@@ -15,12 +15,17 @@ double Calculator::evaluate(string equationString) {
         cout << "ez sem jó" << endl;
         return 0;
     }
+
     try {
         doMath();
-    } catch(overflow_error e){
+    } catch(overflow_error e) {
+        cout << e.what();
+        return 0;
+    } catch (logic_error e) {
         cout << e.what();
         return 0;
     }
+
     return strtod(equationVector[0].getValue().c_str(), NULL);
 }
 
@@ -151,7 +156,11 @@ void Calculator::doOperation(int index) {
     string operationString = equationVector[index].getValue();
 
     if (operationString == "root") result = pow(numberAfterOperator, 1/numberBeforeOperator);
-    else if (operationString == "^") result = pow(numberBeforeOperator, numberAfterOperator);
+    else if (operationString == "^") {
+        if (numberBeforeOperator < 0 && numberAfterOperator - (int) numberAfterOperator != 0) throw std::logic_error ("What the hell do you want??");
+        else result = pow(numberBeforeOperator, numberAfterOperator);
+    }
+
     else if (operationString == "/" || operationString == "/+") {
         if (numberAfterOperator == 0) throw std::overflow_error("Divide by zero exception");
         else result = numberBeforeOperator / numberAfterOperator;
