@@ -49,16 +49,14 @@ int Calculator::findOperatorRootPow() {
 
 int Calculator::findOperatorMultiplicationDivision() {
     for (int i = 0; i < equationVector.size(); ++i) {
-        if (equationVector[i].value == "/" || equationVector[i].value == "/-" ||
-            equationVector[i].value == "*" || equationVector[i].value == "*-") return i;
+        if (equationVector[i].value == "/" || equationVector[i].value == "/-") return i;
     }
     return -1;
 }
 
 int Calculator::findOperatorAdditionSubtraction() {
     for (int i = 0; i < equationVector.size(); ++i) {
-        if (equationVector[i].value == "+" || equationVector[i].value == "-" ||
-            equationVector[i].value == "-+" || equationVector[i].value == "+-") return i;
+        if (equationVector[i].value == "+" || equationVector[i].value == "-") return i;
     }
     return -1;
 }
