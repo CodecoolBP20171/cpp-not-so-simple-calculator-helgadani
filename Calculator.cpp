@@ -166,19 +166,8 @@ void Calculator::doOperation(int index) {
             operationString == "-+") result = numberBeforeOperator - numberAfterOperator;
     else result = 0;
 
-
-    if (index != 0) {
-        equationVector[index-1].value = to_string(result);
-        equationVector.erase(equationVector.begin() + index, equationVector.begin() + index+2);
-    } else {
-        equationVector[index].value = to_string(result);
-        equationVector.erase(equationVector.begin() + index);
-    }
-
-    //cout << result;
-    //for(EquationElement element : equationVector){
-    //    element.print();
-    //}
+    equationVector[index-1].value = to_string(result);
+    equationVector.erase(equationVector.begin() + index, equationVector.begin() + index+2);
 }
 
 
