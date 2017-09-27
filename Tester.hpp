@@ -22,7 +22,9 @@ public:
 
         // Level 1
         TestRoot();
+        TestRoot2();
         TestPow();
+        TestPow2();
         TestFractional();
         TestComplicatedFormula_noBrackets();
         TestComplicatedFormula_root();
@@ -114,11 +116,25 @@ private:
         checkResult(1000, result);
     }
 
+    void TestPow2()
+    {
+        Calculator c;
+        double result = c.evaluate("0^0");
+        checkResult(0, result);
+    }
+
     void TestRoot()
     {
         Calculator c;
         double result = c.evaluate("2root25");
         checkResult(5, result);
+    }
+
+    void TestRoot2()
+    {
+        Calculator c;
+        double result = c.evaluate("3root-27");
+        checkResult(-3, result);
     }
 
     void TestFractional()

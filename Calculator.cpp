@@ -127,16 +127,26 @@ void Calculator::doOperation(int index) {
     string operationString = equationVector[index].value;
     double result;
 
-    if (operationString == "root") result = pow(numberAfterOperator, 1/numberBeforeOperator);
-    else if (operationString == "^") result = pow(numberBeforeOperator, numberAfterOperator);
-    else if (operationString == "/") result = numberBeforeOperator / numberAfterOperator;
-    else if (operationString == "/-") result = numberBeforeOperator / (0-numberAfterOperator);
+    if (operationString == "root") {
+        // A negatív számoknak nincsen tört, valamint páros gyökük.
+        if (numberAfterOperator < 0 && ((int) numberBeforeOperator % 2 == 0 || numberBeforeOperator - (int) numberBeforeOperator != 0)) throw std::logic_error ("What the hell do you want??");
+            // Negatív számok negatív egész gyökének számítása.
+        else if (numberBeforeOperator < 0 && numberBeforeOperator - (int) numberBeforeOperator == 0) result = 0 - pow(abs(numberAfterOperator), 1/numberBeforeOperator);
+        else result = pow(numberAfterOperator, 1/numberBeforeOperator);
+    }
+    else if (operationString == "^") {
+        // A negatív számoknak nincsen tört hatványuk, valamint a 0-nak nincsen 0-dik hatványa.
+        if ((numberBeforeOperator < 0 && numberAfterOperator - (int) numberAfterOperator != 0) ||
+            (numberBeforeOperator == 0 && numberAfterOperator == 0)) throw std::logic_error ("What the hell do you want??");
+        else result = pow(numberBeforeOperator, numberAfterOperator);
+    }
+    else if (operationString == "/") {
+        if (numberAfterOperator == 0) throw std::overflow_error("Divide by zero exception");
+        else result = numberBeforeOperator / numberAfterOperator;
+    }
     else if (operationString == "*") result = numberBeforeOperator * numberAfterOperator;
-    else if (operationString == "*-") result = numberBeforeOperator * (0-numberAfterOperator);
     else if (operationString == "+") result = numberBeforeOperator + numberAfterOperator;
-    else if (operationString == "-" ||
-            operationString == "+-" ||
-            operationString == "-+") result = numberBeforeOperator - numberAfterOperator;
+    else if (operationString == "-") result = numberBeforeOperator - numberAfterOperator;
     else result = 0;
 
     equationVector[index-1].value = to_string(result);
