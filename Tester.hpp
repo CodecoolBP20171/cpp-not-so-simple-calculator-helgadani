@@ -105,8 +105,8 @@ private:
     void TestDivision2()
     {
         Calculator c;
-        double result = c.evaluate("10/-3");
-        checkResult(-3.3, result, 0.05);
+        double result = c.evaluate("10/0");
+        checkResult(0, result, 0.05);
     }
 
     void TestFormulaWithSpaces()

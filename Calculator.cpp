@@ -15,8 +15,12 @@ double Calculator::evaluate(string equationString) {
         cout << "ez sem jó" << endl;
         return 0;
     }
-
-    doMath();
+    try {
+        doMath();
+    } catch(overflow_error e){
+        cout << e.what();
+        return 0;
+    }
     return strtod(equationVector[0].getValue().c_str(), NULL);
 }
 
@@ -89,8 +93,7 @@ vector<EquationElement> Calculator::parseEquationString(string equationString){
     string operatorSign;
 
     for (int i = 0; i < equationString.size(); ++i) {
-        char characterFromString = equationString[i];
-        bool isNumber = find(validDigits.begin(), validDigits.end(), string(1, characterFromString)) != validDigits.end();
+        bool isNumber = find(validDigits.begin(), validDigits.end(), string(1, equationString[i])) != validDigits.end();
 
         if (isNumber) {
             if (!operatorSign.empty()) {
@@ -98,14 +101,14 @@ vector<EquationElement> Calculator::parseEquationString(string equationString){
                 result.push_back(character);
                 operatorSign.clear();
             }
-            digitsOfNumber += characterFromString;
+            digitsOfNumber += equationString[i];
         } else {
             if (!digitsOfNumber.empty()) {
                 EquationElement character(digitsOfNumber, true);
                 result.push_back(character);
                 digitsOfNumber.clear();
             }
-            operatorSign += characterFromString;
+            operatorSign += equationString[i];
         }
 
         if (i == equationString.size() - 1) {
@@ -124,31 +127,24 @@ vector<EquationElement> Calculator::parseEquationString(string equationString){
 void Calculator::doMath() {
     while (operatorPrecedence1) {
         int operatorIndex = findOperatorRootPow();
-        if (operatorIndex > -1) {
-            doOperation(operatorIndex);
-        }
+        if (operatorIndex > -1) doOperation(operatorIndex);
         else operatorPrecedence1 = false;
     }
 
     while (operatorPrecedence2) {
         int operatorIndex = findOperatorMultiplicationDivision();
-        if (operatorIndex > -1) {
-            doOperation(operatorIndex);
-        }
+        if (operatorIndex > -1) doOperation(operatorIndex);
         else operatorPrecedence2 = false;
     }
 
     while (operatorPrecedence3) {
         int operatorIndex = findOperatorAdditionSubtraction();
-        if (operatorIndex > -1) {
-            doOperation(operatorIndex);
-        }
+        if (operatorIndex > -1) doOperation(operatorIndex);
         else operatorPrecedence3 = false;
     }
 }
 
 void Calculator::doOperation(int index) {
-
     double numberBeforeOperator = strtod(equationVector[index-1].getValue().c_str(), NULL);
     double numberAfterOperator = strtod(equationVector[index+1].getValue().c_str(), NULL);
     double result;
@@ -156,13 +152,15 @@ void Calculator::doOperation(int index) {
 
     if (operationString == "root") result = pow(numberAfterOperator, 1/numberBeforeOperator);
     else if (operationString == "^") result = pow(numberBeforeOperator, numberAfterOperator);
-    else if (operationString == "/" || operationString == "/+") result = numberBeforeOperator / numberAfterOperator;
+    else if (operationString == "/" || operationString == "/+") {
+        if (numberAfterOperator == 0) throw std::overflow_error("Divide by zero exception");
+        else result = numberBeforeOperator / numberAfterOperator;
+    }
     else if (operationString == "/-") result = numberBeforeOperator / (0-numberAfterOperator);
     else if (operationString == "*" || operationString == "*+") result = numberBeforeOperator * numberAfterOperator;
     else if (operationString == "*-") result = numberBeforeOperator * (0-numberAfterOperator);
     else if (operationString == "+") result = numberBeforeOperator + numberAfterOperator;
-    else if (operationString == "-" ||
-            operationString == "+-" ||
+    else if (operationString == "-" || operationString == "+-" ||
             operationString == "-+") result = numberBeforeOperator - numberAfterOperator;
     else result = 0;
 
