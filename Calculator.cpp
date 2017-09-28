@@ -42,7 +42,31 @@ void Calculator::correctInputString(string equationString) {
 }
 
 bool Calculator::isValidExpression(){
-    int counter = 1;
+    int counter = 0;
+    bool isPreviousBracket = false;
+
+    for (EquationElement element : equationVector) {
+        if  (counter == 0) {
+            if (element.getValue() != "-" && element.getValue() != "(" && !element.getIsNumber()) return false;
+            if (element.getValue() == "(") {
+                //isPreviousBracket = true;
+                openBracket.push_back(counter);
+            }
+        } else if (counter == equationVector.size() -1) {
+            if (!element.getIsNumber() && element.getValue() != ")") return false;
+            if (element.getValue() == ")") {
+                closeBracket.push_back(counter);
+            }
+
+        } else {
+
+        }
+        ++counter;
+    }
+    //return openBracket == closeBracket ? true : false;
+
+
+
     bool isFirstElementNegative = false;
     for (EquationElement element : equationVector) {
         if (counter == 1) {
@@ -112,12 +136,12 @@ vector<EquationElement> Calculator::parseEquationString(string equationString){
                     result.push_back(character);
                     if (isNextBracket) {
                         bracket += equationString[i+1];
-                        EquationElement character(bracket, false);
-                        result.push_back(character);
+                        EquationElement lastCharacter(bracket, false);
+                        result.push_back(lastCharacter);
                     } else {
                         operatorSign += equationString[i+1];
-                        EquationElement character(operatorSign, false);
-                        result.push_back(character);
+                        EquationElement lastCharacter(operatorSign, false);
+                        result.push_back(lastCharacter);
                     }
                 }
             } else if (isBracket) {
@@ -126,17 +150,17 @@ vector<EquationElement> Calculator::parseEquationString(string equationString){
                 result.push_back(character);
                 if (isNextNumber) {
                     digitsOfNumber += equationString[i+1];
-                    EquationElement character(digitsOfNumber, true);
-                    result.push_back(character);
+                    EquationElement lastCharacter(digitsOfNumber, true);
+                    result.push_back(lastCharacter);
                 } else if (isNextBracket) {
                     bracket.clear();
                     bracket += equationString[i+1];
-                    EquationElement character(bracket, false);
-                    result.push_back(character);
+                    EquationElement lastCharacter(bracket, false);
+                    result.push_back(lastCharacter);
                 } else {
                     operatorSign += equationString[i+1];
-                    EquationElement character(operatorSign, false);
-                    result.push_back(character);
+                    EquationElement lastCharacter(operatorSign, false);
+                    result.push_back(lastCharacter);
                 }
             } else {
                 operatorSign += equationString[i];
@@ -149,12 +173,12 @@ vector<EquationElement> Calculator::parseEquationString(string equationString){
                     result.push_back(character);
                     if (isNextNumber) {
                         digitsOfNumber += equationString[i+1];
-                        EquationElement character(digitsOfNumber, true);
-                        result.push_back(character);
+                        EquationElement lastCharacter(digitsOfNumber, true);
+                        result.push_back(lastCharacter);
                     } else {
                         bracket += equationString[i+1];
-                        EquationElement character(bracket, false);
-                        result.push_back(character);
+                        EquationElement lastCharacter(bracket, false);
+                        result.push_back(lastCharacter);
                     }
                 }
             }
