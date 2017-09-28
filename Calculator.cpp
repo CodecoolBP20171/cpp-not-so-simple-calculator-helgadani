@@ -6,19 +6,22 @@ using namespace std;
 double Calculator::evaluate(string equationString) {
     correctInputString(equationString);
     if (correctedEquationString.empty()) {
-        cout << "nem jó" << endl;
+        cout << "Something is not correct, check your equation!\t";
         return 0;
     }
 
     equationVector = parseEquationString(correctedEquationString);
     if (!isValidExpression()) {
-        cout << "ez sem jó" << endl;
+        cout << "Invalid equation.\t";
         return 0;
     }
     try {
         doMath();
-    } catch(overflow_error e){
-        cout << e.what();
+    } catch(overflow_error exception){
+        cout << exception.what() << ":\t";
+        return 0;
+    } catch (logic_error exception){
+        cout << exception.what() << ":\t";
         return 0;
     }
     return strtod(equationVector[0].getValue().c_str(), NULL);
@@ -72,17 +75,14 @@ int Calculator::findOperatorRootPow() {
 
 int Calculator::findOperatorMultiplicationDivision() {
     for (int i = 0; i < equationVector.size(); ++i) {
-        if (equationVector[i].getValue() == "/" || equationVector[i].getValue() == "*" ||
-            equationVector[i].getValue() == "/-" || equationVector[i].getValue() == "*-" ||
-            equationVector[i].getValue() == "/+" || equationVector[i].getValue() == "*+") return i;
+        if (equationVector[i].getValue() == "/" || equationVector[i].getValue() == "*") return i;
     }
     return -1;
 }
 
 int Calculator::findOperatorAdditionSubtraction() {
     for (int i = 0; i < equationVector.size(); ++i) {
-        if (equationVector[i].getValue() == "+" || equationVector[i].getValue() == "-" ||
-            equationVector[i].getValue() == "-+" || equationVector[i].getValue() == "+-") return i;
+        if (equationVector[i].getValue() == "+" || equationVector[i].getValue() == "-") return i;
     }
     return -1;
 }
@@ -150,18 +150,29 @@ void Calculator::doOperation(int index) {
     double result;
     string operationString = equationVector[index].getValue();
 
-    if (operationString == "root") result = pow(numberAfterOperator, 1/numberBeforeOperator);
-    else if (operationString == "^") result = pow(numberBeforeOperator, numberAfterOperator);
-    else if (operationString == "/" || operationString == "/+") {
+    if (operationString == "root") {
+        // Negative numbers do not have fractional and even roots.
+        if (((int) numberBeforeOperator % 2 == 0 || numberBeforeOperator - (int) numberBeforeOperator != 0) &&
+            numberAfterOperator < 0) throw std::logic_error ("Operation is impossible to perform.");
+            // 0th root is not interpretable.
+        else if (numberBeforeOperator == 0) throw std::logic_error ("Operation is impossible to perform.");
+            // Calculation of negative integer root of negative numbers.
+        else if (numberBeforeOperator < 0 && numberBeforeOperator - (int) numberBeforeOperator == 0) result = 0 - pow(abs(numberAfterOperator), 1/numberBeforeOperator);
+        else result = pow(numberAfterOperator, 1/numberBeforeOperator);
+    }
+    else if (operationString == "^") {
+        // Negative numbers do not have fractional powers and 0 does not have 0th power.
+        if ((numberBeforeOperator < 0 && numberAfterOperator - (int) numberAfterOperator != 0) ||
+            (numberBeforeOperator == 0 && numberAfterOperator == 0)) throw std::logic_error ("Operation is impossible to perform.");
+        else result = pow(numberBeforeOperator, numberAfterOperator);
+    }
+    else if (operationString == "/") {
         if (numberAfterOperator == 0) throw std::overflow_error("Divide by zero exception");
         else result = numberBeforeOperator / numberAfterOperator;
     }
-    else if (operationString == "/-") result = numberBeforeOperator / (0-numberAfterOperator);
-    else if (operationString == "*" || operationString == "*+") result = numberBeforeOperator * numberAfterOperator;
-    else if (operationString == "*-") result = numberBeforeOperator * (0-numberAfterOperator);
+    else if (operationString == "*") result = numberBeforeOperator * numberAfterOperator;
     else if (operationString == "+") result = numberBeforeOperator + numberAfterOperator;
-    else if (operationString == "-" || operationString == "+-" ||
-            operationString == "-+") result = numberBeforeOperator - numberAfterOperator;
+    else if (operationString == "-") result = numberBeforeOperator - numberAfterOperator;
     else result = 0;
 
     equationVector[index-1].setValue(to_string(result));

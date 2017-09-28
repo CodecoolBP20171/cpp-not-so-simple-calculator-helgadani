@@ -13,16 +13,15 @@ public:
         TestAddition();
         TestAddition2();
         TestSubtraction();
-        TestSubtraction2();
-        TestSubtraction3();
         TestMultiplication();
-        TestMultiplication2();
         TestDivision();
         TestDivision2();
         TestFormulaWithSpaces();
 
         // Level 1
         TestRoot();
+        TestRoot1();
+        TestRoot2();
         TestPow();
         TestFractional();
         TestComplicatedFormula_noBrackets();
@@ -49,112 +48,135 @@ private:
     void TestAddition()
     {
         Calculator c;
-        double result = c.evaluate("10+2");
+        string input = "10+2";
+        double result = c.evaluate(input);
+        cout << input << " = " << result << ". ";
         checkResult(12, result);
     }
 
     void TestAddition2()
     {
         Calculator c;
-        double result = c.evaluate("-10+2");
+        string input = "-10+2";
+        double result = c.evaluate(input);
+        cout << input << " = " << result << ". ";
         checkResult(-8, result);
     }
 
     void TestSubtraction()
     {
         Calculator c;
-        double result = c.evaluate("10-2");
+        string input = "10-2";
+        double result = c.evaluate(input);
+        cout << input << " = " << result << ". ";
         checkResult(8, result);
-    }
-
-    void TestSubtraction2()
-    {
-        Calculator c;
-        double result = c.evaluate("10+-8");
-        checkResult(2, result);
-    }
-
-    void TestSubtraction3()
-    {
-        Calculator c;
-        double result = c.evaluate("10-+6");
-        checkResult(4, result);
     }
 
     void TestMultiplication()
     {
         Calculator c;
-        double result = c.evaluate("3*2");
+        string input = "3*2";
+        double result = c.evaluate(input);
+        cout << input << " = " << result << ". ";
         checkResult(6, result);
-    }
-
-    void TestMultiplication2()
-    {
-        Calculator c;
-        double result = c.evaluate("3*-2");
-        checkResult(-6, result);
     }
 
     void TestDivision()
     {
         Calculator c;
-        double result = c.evaluate("10/3");
+        string input = "10/3";
+        double result = c.evaluate(input);
+        cout << input << " = " << result << ". ";
         checkResult(3.3, result, 0.05);
     }
 
     void TestDivision2()
     {
         Calculator c;
-        double result = c.evaluate("10/0");
+        string input = "10/0";
+        double result = c.evaluate(input);
+        cout << input << " = " << result << ". ";
         checkResult(0, result, 0.05);
     }
 
     void TestFormulaWithSpaces()
     {
         Calculator c;
-        double result = c.evaluate(" 10 / 3*2 +   8 ");
+        string input = " 10 / 3*2 +   8 ";
+        double result = c.evaluate(input);
+        cout << input << " = " << result << ". ";
         checkResult(14.7, result, 0.05);
     }
 
     void TestPow()
     {
         Calculator c;
-        double result = c.evaluate("10^3");
+        string input = " 10^3";
+        double result = c.evaluate(input);
+        cout << input << " = " << result << ". ";
         checkResult(1000, result);
     }
 
     void TestRoot()
     {
         Calculator c;
-        double result = c.evaluate("2root25");
+        string input = "2root25";
+        double result = c.evaluate(input);
+        cout << input << " = " << result << ". ";
         checkResult(5, result);
+    }
+
+    void TestRoot1()
+    {
+        Calculator c;
+        string input = "0root25";
+        double result = c.evaluate(input);
+        cout << input << " = " << result << ". ";
+        checkResult(0, result);
+    }
+
+    void TestRoot2()
+    {
+        Calculator c;
+        string input = "root25";
+        double result = c.evaluate(input);
+        cout << input << " = " << result << ". ";
+        checkResult(0, result);
     }
 
     void TestFractional()
     {
         Calculator c;
-        double result = c.evaluate("2.3+2.7");
+        string input = "2.3+2.7";
+        double result = c.evaluate(input);
+        cout << input << " = " << result << ". ";
         checkResult(5, result);
     }
 
     void TestComplicatedFormula_noBrackets()
     {
         Calculator c;
-        double result = c.evaluate("12+20*3-50/2+3");
+        string input = "12+20*3-50/2+3";
+        double result = c.evaluate(input);
+        cout << input << " = " << result << ". ";
         checkResult(50, result);
     }
 
     void TestComplicatedFormula_root()
     {
         Calculator c;
-        double result = c.evaluate("12+2*2root25+3");
+        string input = "12+2*2root25+3";
+        double result = c.evaluate(input);
+        cout << input << " = " << result << ". ";
         checkResult(25, result);
     }
 
     void TestComplicatedFormula_rootAndPower()
     {
         Calculator c;
-        double result = c.evaluate("12+2*2root25+10^4+6-3");
+        string input = "12+2*2root25+10^4+6-3";
+        double result = c.evaluate(input);
+        cout << input << " = " << result << ". ";
         checkResult(10025, result);
     }
 
@@ -162,7 +184,9 @@ private:
     {
         Calculator c;
         // calculator prints an error msg and returns with 0
-        double result = c.evaluate("12+2*2rrot25+10^4+6-3");
+        string input = "12+2*2rrot25+10^4+6-3";
+        double result = c.evaluate(input);
+        cout << input << " = " << result << ". ";
         checkResult(0, result);
     }
 
@@ -170,7 +194,9 @@ private:
     {
         Calculator c;
         // calculator prints an error msg and returns with 0
-        double result = c.evaluate("-12+2*-+2root-25+10^4+6-3");
+        string input = "-12+2*-+2root-25+10^4+6-3";
+        double result = c.evaluate(input);
+        cout << input << " = " << result << ". ";
         checkResult(0, result);
     }
 

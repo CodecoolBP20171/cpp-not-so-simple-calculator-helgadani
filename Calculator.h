@@ -16,8 +16,7 @@ public:
     vector<char> validCharacters {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '+', '-', '*', '/', '^',
                                   'r', 'o', 't'};
     vector<string> validDigits {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "."};
-    vector<string> validOperators {"+", "-", "+-", "-+", "*", "*+", "*-", "/", "/+", "/-", "^", "root"};
-    vector<string> brakets {"(", ")"};
+    vector<string> validOperators {"+", "-", "*", "/", "^", "root"};
     bool operatorPrecedence1 = true;
     bool operatorPrecedence2 = true;
     bool operatorPrecedence3 = true;
