@@ -124,9 +124,14 @@ vector<EquationElement> Calculator::parseEquationString(string equationString){
     return result;
 }
 
+int Calculator::processOperators(int (Calculator::*functionToCall)()) {
+    int a = (this->*functionToCall)();
+    return (a);
+}
+
 void Calculator::doMath() {
     while (operatorPrecedence1) {
-        int operatorIndex = findOperatorRootPow();
+        int operatorIndex = processOperators(&Calculator::findOperatorRootPow);
         if (operatorIndex > -1) doOperation(operatorIndex);
         else operatorPrecedence1 = false;
     }
