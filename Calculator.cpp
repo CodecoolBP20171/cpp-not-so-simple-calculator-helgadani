@@ -124,29 +124,18 @@ vector<EquationElement> Calculator::parseEquationString(string equationString){
     return result;
 }
 
-int Calculator::processOperators(int (Calculator::*functionToCall)()) {
-    int a = (this->*functionToCall)();
-    return (a);
+void Calculator::processOperators(int (Calculator::*functionToCall)(), bool &precedence) {
+    while (precedence) {
+        int operatorIndex = (this->*functionToCall)();
+        if (operatorIndex > -1) doOperation(operatorIndex);
+        else precedence = false;
+    }
 }
 
 void Calculator::doMath() {
-    while (operatorPrecedence1) {
-        int operatorIndex = processOperators(&Calculator::findOperatorRootPow);
-        if (operatorIndex > -1) doOperation(operatorIndex);
-        else operatorPrecedence1 = false;
-    }
-
-    while (operatorPrecedence2) {
-        int operatorIndex = findOperatorMultiplicationDivision();
-        if (operatorIndex > -1) doOperation(operatorIndex);
-        else operatorPrecedence2 = false;
-    }
-
-    while (operatorPrecedence3) {
-        int operatorIndex = findOperatorAdditionSubtraction();
-        if (operatorIndex > -1) doOperation(operatorIndex);
-        else operatorPrecedence3 = false;
-    }
+    processOperators(&Calculator::findOperatorRootPow, operatorPrecedence1);
+    processOperators(&Calculator::findOperatorMultiplicationDivision, operatorPrecedence2);
+    processOperators(&Calculator::findOperatorAdditionSubtraction, operatorPrecedence3);
 }
 
 void Calculator::doOperation(int index) {

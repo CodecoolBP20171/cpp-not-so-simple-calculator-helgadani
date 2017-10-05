@@ -25,7 +25,8 @@ public:
     double evaluate(string equationString);
     void correctInputString(string equationString);
     void doMath();
-    int processOperators(int (Calculator::*functionToCall)());
+
+    void processOperators(int (Calculator::*functionToCall)(), bool &precedence);
     void doOperation(int index);
     bool isValidExpression();
     int findOperatorRootPow();
